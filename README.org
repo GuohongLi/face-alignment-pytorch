@@ -30,13 +30,14 @@
    2. Download the 300W-LP dataset from the [[http://www.cbsr.ia.ac.cn/users/xiangyuzhu/projects/3DDFA/Database/300W-LP/main.htm][Here]].
 
    3. Download the 300W-LP annotations converted to t7 format by paper author from [[https://www.adrianbulat.com/downloads/FaceAlignment/landmarks.zip][here]], extract it and move the ```landmarks``` folder to the root of the 300W-LP dataset.
+
    4. Download the face detector pretrain model file from [[https://www.adrianbulat.com/downloads/python-fan/s3fd_convert.pth][s3fd_convert.pth]]
 
 ** Usage
 
    In order to run the demo please download the required models available bellow and the associated data.
    
-   ***Train
+*** Train
 
    #+BEGIN_SRC bash
      python train.py
@@ -48,7 +49,7 @@
      python train.py --help
    #+END_SRC
 
-   ***Inference
+*** Inference
 
    #+BEGIN_SRC bash
      python inference.py
