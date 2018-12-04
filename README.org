@@ -1,0 +1,80 @@
+* Pytorch version of 'How far are we from solving the 2D \& 3D Face Alignment problem? (and a dataset of 230,000 3D facial landmarks)'
+
+  For official torch7 version please refer to [[https://github.com/1adrianb/face-alignment-training][face-alignment-training]]. Please visit [[https://www.adrianbulat.com][author's webpage]] or [[https://arxiv.org/abs/1703.07332][arxiv]] for technical details.
+
+  This is a reinplement of training and Inference code for 2D-FAN and 3D-FAN decribed in "How far" paper. And up to now, since I have seeked for a pytorch version for a long time but always find some error in others version, maybe this job is the only one with both train code and inference code in pytorch. And I also have checked the results. 
+  This code take some other codes in github for reference, such as [[https://github.com/hzh8311/pyhowfar][pyhowfar]], [[https://github.com/1adrianb/face-alignment][face-alignment]].
+
+  Pretrained models are available soon.
+
+** Requirments
+
+   - Install the latest [[http://pytorch.org][PyTorch]], version 0.4.1 is fully supported and there is no further test on older version.
+   - Install python 3.6.6, which is fully supported and there is no further test on older version.
+
+*** Packages
+
+    - [[https://www.scipy.org/][scipy]]
+    - [[https://pytorch.org][torchvision]]
+    - [[https://pypi.python.org/pypi/progress][progress]](optional) for better visualization.
+
+** Setup
+
+   1. Clone the github repository and install all the dependencies mentiones above.
+
+   #+BEGIN_SRC bash
+     git clone https://github.com/GuohongLi/face-alignment-pytorch.git
+     cd face-alignment-pytorch
+   #+END_SRC
+
+   2. Download the 300W-LP dataset from the [[http://www.cbsr.ia.ac.cn/users/xiangyuzhu/projects/3DDFA/Database/300W-LP/main.htm][Here]].
+
+   3. Download the 300W-LP annotations converted to t7 format by paper author from [[https://www.adrianbulat.com/downloads/FaceAlignment/landmarks.zip][here]], extract it and move the ```landmarks``` folder to the root of the 300W-LP dataset.
+   4. Download the face detector pretrain model file from [[https://www.adrianbulat.com/downloads/python-fan/s3fd_convert.pth][s3fd_convert.pth]]
+
+** Usage
+
+   In order to run the demo please download the required models available bellow and the associated data.
+   
+   ***Train
+
+   #+BEGIN_SRC bash
+     python train.py
+   #+END_SRC
+
+   In order to see all the available options please run:
+
+   #+BEGIN_SRC bash 
+     python train.py --help
+   #+END_SRC
+
+   ***Inference
+
+   #+BEGIN_SRC bash
+     python inference.py
+   #+END_SRC
+
+   In order to see all the available options please run:
+
+   #+BEGIN_SRC bash 
+     python inference.py --help
+   #+END_SRC
+
+** What's different?
+
+   - Pythoner friendly and there is no need for `.t7` format annotations
+   - Add 300-W-LP test set for validation.
+   - Followed the excatly same training procedure described in the paper (except binary network part).
+   - Add model evaluation in terms of **Mean error**, **AUC@0.07**
+   - TODO: add evaluation on test sets (300W, 300VW, AFLW2000-3D etc.).
+
+** Citation
+
+   #+BEGIN_SRC bibtex
+                       @inproceedings{bulat2017far,
+                         title={How far are we from solving the 2D \& 3D Face Alignment problem? (and a dataset of 230,000 3D facial landmarks)},
+                         author={Bulat, Adrian and Tzimiropoulos, Georgios},
+                         booktitle={International Conference on Computer Vision},
+                         year={2017}
+                       }
+   #+END_SRC
