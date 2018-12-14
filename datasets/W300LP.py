@@ -76,15 +76,16 @@ class W300LP(data.Dataset):
 
         imagepath = os.path.join(self.img_folder, self.anno[idx].split('_')[0], self.anno[idx][:-7] + '.jpg')
         img = load_image(imagepath)
-        img_in = img
 
         height = img.size(1)
         width = img.size(2)
         hw = max(width, height)
-        c = torch.FloatTensor(( float(width*1.0/2), float(height*1.0/2) ))
+        #consider the landmarks are mainly distributed in the lower half face, so it needs move the center to some lower along height direction
+        c = torch.FloatTensor(( float(width*1.0/2), float(height*1.0/2 + height*0.12) ))
         reference_scale = torch.tensor(200.0)
-        scale_x = hw / reference_scale
-        scale_y = hw / reference_scale
+        #we hope face for train to be larger than in raw image, so edge will be short by 0.8 ration
+        scale_x = hw*0.8 / reference_scale
+        scale_y = hw*0.8 / reference_scale
         s = torch.FloatTensor(( scale_x, scale_y ))
 
         r = 0
@@ -119,11 +120,11 @@ class W300LP(data.Dataset):
         reference_scale_tmp = reference_scale.view(1, -1)
         pts, pts_img = get_preds_fromhm(out_tmp, c_tmp, s_tmp, reference_scale_tmp)
         pts, pts_img = pts.view(68, 2) * 4, pts_img.view(68, 2)
-        io.imsave('%s_crop.jpg' % idx,im_to_numpy(inp))
-        inp_in = io.imread('%s_crop.jpg' % idx)
+        io.imsave('%s_crop_pts.jpg' % idx,im_to_numpy(inp))
+        inp_in = io.imread('%s_crop_pts.jpg' % idx)
         for i in range(pts.shape[0]):
-            cv2.circle(inp_in, (pts[i][0], pts[i][1]),5,(0,255,0), -1, 8)
-        io.imsave('%s_crop.jpg' % idx,inp_in)
+            cv2.circle(inp_in, (pts[i][0], pts[i][1]),2,(0,255,0), -1, 8)
+        io.imsave('%s_crop_pts.jpg' % idx,inp_in)
         '''
 
         return inp, out, pts, c, s, reference_scale

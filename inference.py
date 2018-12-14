@@ -122,7 +122,7 @@ class FaceAlignment:
             center = torch.FloatTensor(
                 [d[2] - (d[2] - d[0]) / 2.0, d[3] -
                  (d[3] - d[1]) / 2.0])
-            #center[1] = center[1] - (d[3] - d[1]) * 0.12
+            center[1] = center[1] + (d[3] - d[1]) * 0.12
             hw = max(d[2] - d[0], d[3] - d[1])
             scale_x = float(hw / reference_scale)
             scale_y = float(hw / reference_scale)

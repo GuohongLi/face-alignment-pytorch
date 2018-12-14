@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import matplotlib
 matplotlib.use('Agg')
@@ -90,6 +91,8 @@ def trainFAN(args):
             logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title, resume=True)
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
+            logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title)
+            logger.set_names(['Epoch', 'LR', 'Train Loss', 'Valid Loss', 'Train Acc', 'Val Acc', 'AUC'])
     else:
         logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title)
         logger.set_names(['Epoch', 'LR', 'Train Loss', 'Valid Loss', 'Train Acc', 'Val Acc', 'AUC'])
@@ -118,6 +121,7 @@ def trainFAN(args):
     for epoch in range(args.start_epoch, args.epochs):
         lr = adjust_learning_rate(optimizer, epoch, lr, args.schedule, args.gamma)
         print('=> Epoch: %d | LR %.8f' % (epoch + 1, lr))
+        sys.stdout.flush()
 
         train_loss, train_acc = train(train_loader, model, criterion, optimizer, args.netType,
                                       args.debug, args.flip)
@@ -199,6 +203,7 @@ def train(loader, model, criterion, optimizer, netType, debug=False, flip=False)
         acces.update(acc[0], inputs.size(0))
 
         optimizer.zero_grad()
+        #loss.backward(retain_graph=True)
         loss.backward()
         optimizer.step()
 
@@ -298,6 +303,7 @@ def validate(loader, model, criterion, netType, debug, flip):
     mean_error = torch.mean(all_dists)
     auc = calc_metrics(all_dists) # this is auc of predicted maps and target.
     print("=> Mean Error: {:.2f}, AUC@0.07: {} based on maps".format(mean_error*100., auc))
+    sys.stdout.flush()
     return losses.avg, acces.avg, predictions, auc
 
 
