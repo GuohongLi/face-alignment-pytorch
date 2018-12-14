@@ -6,7 +6,7 @@ import os
 def argparser():
     P = argparse.ArgumentParser(description='Train network script')
     P.add_argument('--data', type=str, default='data/300W_LP', help='path to dataset')
-    P.add_argument('--snapshot', type=int, default=10, help='save a snapshot every n epoch(s)')
+    P.add_argument('--snapshot', type=int, default=1, help='save a snapshot every n epoch(s)')
     P.add_argument('--epochs', type=int, default=40, help='Number of total epochs to run')
     P.add_argument('--workers', type=int, default=4, help='number of data loader threads')
     # for a single GPU.
